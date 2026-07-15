@@ -385,6 +385,7 @@
         let currentActiveQuestion = null;
         let timerInterval = null;
         let readingInterval = null;
+        let successTimeout = null;
         let timeLeft = 0;
 
         function init() {
@@ -426,13 +427,11 @@
         }
 
         function renderCategories() {
-            // Shuffle the categories to randomize their order!
             for (let i = quizData.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [quizData[i], quizData[j]] = [quizData[j], quizData[i]];
             }
 
-            // Hide them again for the surprise factor
             gameState.revealedCats = [];
             saveState();
 
@@ -511,6 +510,7 @@
             
             clearInterval(timerInterval);
             clearInterval(readingInterval);
+            clearTimeout(successTimeout);
 
             let readTimeLeft = 5;
             timerDisplay.textContent = `Starts in ${readTimeLeft}...`;
@@ -558,6 +558,7 @@
         function cancelPlay() {
             clearInterval(timerInterval);
             clearInterval(readingInterval);
+            clearTimeout(successTimeout);
             goHome();
         }
 
@@ -580,18 +581,23 @@
 
             if (isCorrect) {
                 clearInterval(timerInterval);
+                document.getElementById('timer-display').classList.remove('danger');
+                document.getElementById('timer-display').textContent = '✔';
+                
                 fb.className = 'feedback correct';
-                fb.textContent = "Correct! Well done.";
+                fb.textContent = "Correct! Going back to category in 5 seconds...";
+                
                 document.getElementById('answer-input').disabled = true;
                 document.getElementById('submit-btn').style.display = 'none';
                 
                 gameState.answeredQuestions.push(currentActiveQuestion.id);
                 saveState();
 
-                setTimeout(() => {
+                // Wait 5 seconds before returning to the category grid
+                successTimeout = setTimeout(() => {
                     const cat = quizData.find(c => c.id === currentActiveQuestion.categoryId);
                     openCategory(cat);
-                }, 1500);
+                }, 5000);
             } else {
                 fb.className = 'feedback wrong';
                 fb.textContent = "Incorrect, try again!";

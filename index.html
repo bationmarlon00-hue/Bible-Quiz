@@ -585,7 +585,7 @@
                 document.getElementById('timer-display').textContent = '✔';
                 
                 fb.className = 'feedback correct';
-                fb.textContent = "Correct! Going back to category in 5 seconds...";
+                fb.textContent = "Correct! Going back to the Main Screen in 5 seconds...";
                 
                 document.getElementById('answer-input').disabled = true;
                 document.getElementById('submit-btn').style.display = 'none';
@@ -593,10 +593,9 @@
                 gameState.answeredQuestions.push(currentActiveQuestion.id);
                 saveState();
 
-                // Wait 5 seconds before returning to the category grid
+                // Wait 5 seconds before returning to the home screen (boxes 1, 2, 3)
                 successTimeout = setTimeout(() => {
-                    const cat = quizData.find(c => c.id === currentActiveQuestion.categoryId);
-                    openCategory(cat);
+                    goHome();
                 }, 5000);
             } else {
                 fb.className = 'feedback wrong';

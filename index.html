@@ -130,6 +130,23 @@
             background: var(--sda-blue);
             border-color: var(--sda-gold);
         }
+        
+        /* Completed Category Styling */
+        .cat-complete-badge {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 3rem;
+            color: var(--correct-green);
+            display: none;
+        }
+        .cat-box.cat-completed {
+            border-color: var(--correct-green);
+        }
+        .cat-box.cat-completed .cat-complete-badge {
+            display: block;
+        }
+
         .instructions {
             text-align: center;
             margin-bottom: 2rem;
@@ -442,7 +459,15 @@
                 const box = document.createElement('div');
                 box.className = 'cat-box';
                 
+                // Check if all questions in this category are answered
+                const isCategoryComplete = cat.questions.every(q => gameState.answeredQuestions.includes(q.id));
+                
+                if (isCategoryComplete) {
+                    box.classList.add('cat-completed');
+                }
+
                 box.innerHTML = `
+                    <div class="cat-complete-badge">✔</div>
                     <div class="box-number">${index + 1}</div>
                     <div class="box-title">${cat.name}</div>
                 `;

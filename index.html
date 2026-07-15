@@ -225,7 +225,13 @@
             margin-top: 1rem;
             color: #27ae60;
             font-weight: bold;
-            font-size: 1.1rem;
+            font-size: 1rem;
+        }
+        .q-reference-reveal {
+            font-size: 0.85rem;
+            color: var(--sda-blue);
+            font-style: italic;
+            margin-top: 0.5rem;
         }
         .question-card.answered .q-answer-reveal {
             display: block;
@@ -238,7 +244,7 @@
             border-radius: 15px;
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
             text-align: center;
-            max-width: 700px;
+            max-width: 800px;
             margin: 0 auto;
         }
         .timer {
@@ -264,38 +270,52 @@
             color: var(--sda-blue);
             min-height: 4rem;
         }
-        .answer-input {
-            width: 100%;
-            padding: 1rem;
+        
+        /* Multiple Choice Styles */
+        .mcq-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            display: none; /* Hidden during reading phase */
+        }
+        @media (max-width: 600px) {
+            .mcq-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .mcq-btn {
+            padding: 1.2rem;
             font-size: 1.2rem;
-            border: 2px solid #ccc;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-        .answer-input:focus {
-            border-color: var(--sda-blue);
-        }
-        .answer-input:disabled {
-            background-color: #eee;
-            cursor: not-allowed;
-        }
-        .submit-btn {
-            background: var(--sda-gold);
+            border: 2px solid var(--sda-blue);
+            background: white;
             color: var(--sda-blue);
-            border: none;
-            padding: 1rem 2rem;
-            font-size: 1.2rem;
-            font-weight: bold;
             border-radius: 8px;
             cursor: pointer;
-            transition: background 0.3s;
-            width: 100%;
+            transition: all 0.2s ease;
+            font-weight: bold;
         }
-        .submit-btn:hover {
-            background: #d49500;
+        .mcq-btn:hover:not(:disabled) {
+            background: var(--sda-blue);
+            color: white;
         }
+        .mcq-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        .mcq-btn.btn-correct {
+            background: var(--correct-green);
+            border-color: var(--correct-green);
+            color: white;
+            opacity: 1 !important;
+        }
+        .mcq-btn.btn-wrong {
+            background: var(--wrong-red);
+            border-color: var(--wrong-red);
+            color: white;
+            opacity: 0.5 !important;
+        }
+
         .feedback {
             margin-top: 1rem;
             font-size: 1.2rem;
@@ -306,6 +326,21 @@
         .feedback.correct { color: var(--correct-green); }
         .feedback.timeup { color: var(--wrong-red); }
         .feedback.reading { color: var(--sda-blue); }
+        
+        .play-reference {
+            display: none;
+            margin-top: 1rem;
+            font-size: 1.2rem;
+            color: var(--sda-blue);
+            font-style: italic;
+            font-weight: bold;
+            background: #e1eaf5;
+            padding: 0.8rem;
+            border-radius: 5px;
+        }
+        .play-reference.show {
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
@@ -335,9 +370,12 @@
             <div class="play-container">
                 <div class="timer" id="timer-display">Get Ready...</div>
                 <div class="play-question" id="play-question-text">Question text goes here?</div>
-                <input type="text" class="answer-input" id="answer-input" placeholder="Type your answer here..." autocomplete="off" disabled>
-                <button class="submit-btn" id="submit-btn" onclick="checkAnswer()" style="display: none;">Submit Answer</button>
+                
+                <!-- MCQ Grid -->
+                <div class="mcq-grid" id="mcq-container"></div>
+
                 <div class="feedback" id="play-feedback"></div>
+                <div class="play-reference" id="play-reference"></div>
             </div>
         </div>
     </div>
@@ -348,48 +386,48 @@
                 id: 'cat1',
                 name: 'People in the Bible',
                 questions: [
-                    { id: 'q1', text: "Who were the first apostles called to follow Jesus?", answers: ['peter and andrew', 'andrew and peter', 'peter & andrew', 'andrew & peter'], diff: 'easy', time: 15, displayAnswer: 'Peter and Andrew' },
-                    { id: 'q2', text: "Who murders John the Baptist?", answers: ['king herod antipas', 'herod antipas', 'herod', 'king herod'], diff: 'med', time: 25, displayAnswer: 'King Herod Antipas' },
-                    { id: 'q3', text: "Who betrayed Jesus?", answers: ['judas', 'judas iscariot'], diff: 'easy', time: 15, displayAnswer: 'Judas' },
-                    { id: 'q4', text: "Who is the only daughter of Jacob?", answers: ['dinah'], diff: 'med', time: 25, displayAnswer: 'Dinah' },
-                    { id: 'q5', text: "This man was sick for quite some time and died before Jesus arrived. When Jesus arrived however, he immediately raised him from the dead.", answers: ['lazarus'], diff: 'easy', time: 15, displayAnswer: 'Lazarus' },
-                    { id: 'q6', text: "According to the Bible, who was the oldest man who ever lived?", answers: ['methuselah'], diff: 'easy', time: 15, displayAnswer: 'Methuselah' },
-                    { id: 'q7', text: "Who is the woman that is Jewish and queen of Persia?", answers: ['esther', 'queen esther'], diff: 'easy', time: 15, displayAnswer: 'Esther' },
-                    { id: 'q8', text: "Who is the woman was a prostitute who married Hosea?", answers: ['gomer'], diff: 'med', time: 25, displayAnswer: 'Gomer' },
-                    { id: 'q9', text: "Who is the woman that was a Gentile and the great-grandmother of King David, placing her in the genealogy of Jesus Christ?", answers: ['ruth'], diff: 'med', time: 25, displayAnswer: 'Ruth' },
-                    { id: 'q10', text: "Who is the baby that was put in a reed basket and placed in the Nile River?", answers: ['moses'], diff: 'easy', time: 15, displayAnswer: 'Moses' },
-                    { id: 'q11', text: "Who is the youngster cared for his father's sheep and eventually saved his people from the Philistines by killing the champion Goliath?", answers: ['david', 'king david'], diff: 'easy', time: 15, displayAnswer: 'David' },
-                    { id: 'q12', text: "Who are the parents of John the Baptist?", answers: ['elizabeth and zacharias', 'zacharias and elizabeth', 'zechariah and elizabeth', 'elizabeth and zechariah'], diff: 'hard', time: 35, displayAnswer: 'Elizabeth and Zacharias' },
-                    { id: 'q25', text: "Who is the eldest son of Jacob?", answers: ['reuben'], diff: 'med', time: 25, displayAnswer: 'Reuben' },
-                    { id: 'q26', text: "Who is the disciple of Jesus that He found under the fig tree?", answers: ['nathanael', 'nathaniel'], diff: 'hard', time: 35, displayAnswer: 'Nathanael' }
+                    { id: 'q1', text: "Who were the first apostles called to follow Jesus?", options: ['Peter and Andrew', 'James and John', 'Philip and Bartholomew', 'Paul and Silas'], correctOption: 'Peter and Andrew', reference: 'Matthew 4:18', diff: 'easy', time: 15 },
+                    { id: 'q2', text: "Who murders John the Baptist?", options: ['King Herod Antipas', 'Pontius Pilate', 'Herod the Great', 'Caesar Augustus'], correctOption: 'King Herod Antipas', reference: 'Matthew 14:1-12', diff: 'med', time: 25 },
+                    { id: 'q3', text: "Who betrayed Jesus?", options: ['Judas Iscariot', 'Peter', 'Thomas', 'John'], correctOption: 'Judas Iscariot', reference: 'Matthew 26:14-16', diff: 'easy', time: 15 },
+                    { id: 'q4', text: "Who is the only daughter of Jacob?", options: ['Dinah', 'Rachel', 'Leah', 'Tamar'], correctOption: 'Dinah', reference: 'Genesis 30:21', diff: 'med', time: 25 },
+                    { id: 'q5', text: "This man was sick for quite some time and died before Jesus arrived. When Jesus arrived however, he immediately raised him from the dead.", options: ['Lazarus', "Jairus' daughter", "The widow's son at Nain", 'Nicodemus'], correctOption: 'Lazarus', reference: 'John 11:43-44', diff: 'easy', time: 15 },
+                    { id: 'q6', text: "According to the Bible, who was the oldest man who ever lived?", options: ['Methuselah', 'Noah', 'Adam', 'Enoch'], correctOption: 'Methuselah', reference: 'Genesis 5:27', diff: 'easy', time: 15 },
+                    { id: 'q7', text: "Who is the woman that is Jewish and queen of Persia?", options: ['Esther', 'Vashti', 'Ruth', 'Jezebel'], correctOption: 'Esther', reference: 'Esther 2:17', diff: 'easy', time: 15 },
+                    { id: 'q8', text: "Who is the woman was a prostitute who married Hosea?", options: ['Gomer', 'Rahab', 'Mary Magdalene', 'Delilah'], correctOption: 'Gomer', reference: 'Hosea 1:3', diff: 'med', time: 25 },
+                    { id: 'q9', text: "Who is the woman that was a Gentile and the great-grandmother of King David, placing her in the genealogy of Jesus Christ?", options: ['Ruth', 'Rahab', 'Tamar', 'Bathsheba'], correctOption: 'Ruth', reference: 'Ruth 4:13-22 & Matthew 1:5', diff: 'med', time: 25 },
+                    { id: 'q10', text: "Who is the baby that was put in a reed basket and placed in the Nile River?", options: ['Moses', 'Aaron', 'Samuel', 'Isaac'], correctOption: 'Moses', reference: 'Exodus 2:3', diff: 'easy', time: 15 },
+                    { id: 'q11', text: "Who is the youngster cared for his father's sheep and eventually saved his people from the Philistines by killing the champion Goliath?", options: ['David', 'Saul', 'Samson', 'Jonathan'], correctOption: 'David', reference: '1 Samuel 17', diff: 'easy', time: 15 },
+                    { id: 'q12', text: "Who are the parents of John the Baptist?", options: ['Elizabeth and Zacharias', 'Mary and Joseph', 'Hannah and Elkanah', 'Sarah and Abraham'], correctOption: 'Elizabeth and Zacharias', reference: 'Luke 1:13', diff: 'hard', time: 35 },
+                    { id: 'q25', text: "Who is the eldest son of Jacob?", options: ['Reuben', 'Joseph', 'Judah', 'Simeon'], correctOption: 'Reuben', reference: 'Genesis 29:32', diff: 'med', time: 25 },
+                    { id: 'q26', text: "Who is the disciple of Jesus that He found under the fig tree?", options: ['Nathanael', 'Philip', 'Matthew', 'Zacchaeus'], correctOption: 'Nathanael', reference: 'John 1:48', diff: 'hard', time: 35 }
                 ]
             },
             {
                 id: 'cat2',
                 name: 'Places & Mountains',
                 questions: [
-                    { id: 'q13', text: "Where was Jesus born?", answers: ['bethlehem'], diff: 'easy', time: 15, displayAnswer: 'Bethlehem' },
-                    { id: 'q14', text: "What place does Jesus performed His first miracle?", answers: ['cana', 'cana in galilee'], diff: 'easy', time: 15, displayAnswer: 'Cana' },
-                    { id: 'q15', text: "Where was the land that God sent Abraham to sacrifice his son Isaac?", answers: ['moriah', 'mount moriah'], diff: 'med', time: 25, displayAnswer: 'Moriah' },
-                    { id: 'q16', text: "According to Deuteronomy 34:1-4, what mountain was Moses on when he saw Canaan, or the Promised Land, for his first and only time?", answers: ['mount nebo', 'nebo', 'mt nebo', 'mt. nebo'], diff: 'hard', time: 35, displayAnswer: 'Mount Nebo' },
-                    { id: 'q17', text: "According to Genesis 8:4, where did Noah's ark land?", answers: ['mount ararat', 'ararat', 'mt ararat', 'mt. ararat'], diff: 'med', time: 25, displayAnswer: 'Mount Ararat' },
-                    { id: 'q18', text: "Where were Saul and his three sons killed by the Philistines?", answers: ['mount gilboa', 'gilboa', 'mt gilboa', 'mt. gilboa'], diff: 'hard', time: 35, displayAnswer: 'Mount Gilboa' },
-                    { id: 'q19', text: "What mountain is most mentioned in the Bible?", answers: ['mount zion', 'zion', 'mt zion', 'mt. zion'], diff: 'hard', time: 35, displayAnswer: 'Mount Zion' },
-                    { id: 'q20', text: "Where did God reveal or give the ten commandments to Moses?", answers: ['mount sinai', 'sinai', 'mt sinai', 'mt. sinai'], diff: 'easy', time: 15, displayAnswer: 'Mount Sinai' },
-                    { id: 'q21', text: "On which mountain did Jesus deliver His prophetic discourse?", answers: ['mount olives', 'mount of olives', 'mt olives', 'mt. olives', 'olives'], diff: 'hard', time: 35, displayAnswer: 'Mount Olives' },
-                    { id: 'q22', text: "In which city did Abraham originally live before moving to Canaan?", answers: ['ur'], diff: 'med', time: 25, displayAnswer: 'Ur' },
-                    { id: 'q23', text: "In which city was Samson imprisoned before his death?", answers: ['gaza'], diff: 'med', time: 25, displayAnswer: 'Gaza' },
-                    { id: 'q24', text: "Where did the prophet Jonah go to find a ship to Tarshish?", answers: ['joppa'], diff: 'med', time: 25, displayAnswer: 'Joppa' }
+                    { id: 'q13', text: "Where was Jesus born?", options: ['Bethlehem', 'Nazareth', 'Jerusalem', 'Capernaum'], correctOption: 'Bethlehem', reference: 'Matthew 2:1', diff: 'easy', time: 15 },
+                    { id: 'q14', text: "What place does Jesus performed His first miracle?", options: ['Cana', 'Galilee', 'Bethany', 'Jericho'], correctOption: 'Cana', reference: 'John 2:1-11', diff: 'easy', time: 15 },
+                    { id: 'q15', text: "Where was the land that God sent Abraham to sacrifice his son Isaac?", options: ['Mount Moriah', 'Mount Sinai', 'Mount Carmel', 'Mount Ararat'], correctOption: 'Mount Moriah', reference: 'Genesis 22:2', diff: 'med', time: 25 },
+                    { id: 'q16', text: "According to Deuteronomy 34:1-4, what mountain was Moses on when he saw Canaan, or the Promised Land, for his first and only time?", options: ['Mount Nebo', 'Mount Sinai', 'Mount Hor', 'Mount Horeb'], correctOption: 'Mount Nebo', reference: 'Deuteronomy 34:1', diff: 'hard', time: 35 },
+                    { id: 'q17', text: "According to Genesis 8:4, where did Noah's ark land?", options: ['Mount Ararat', 'Mount Sinai', 'Mount Zion', 'Mount Hermon'], correctOption: 'Mount Ararat', reference: 'Genesis 8:4', diff: 'med', time: 25 },
+                    { id: 'q18', text: "Where were Saul and his three sons killed by the Philistines?", options: ['Mount Gilboa', 'Mount Carmel', 'Mount Tabor', 'Mount Olives'], correctOption: 'Mount Gilboa', reference: '1 Samuel 31:1-6', diff: 'hard', time: 35 },
+                    { id: 'q19', text: "What mountain is most mentioned in the Bible?", options: ['Mount Zion', 'Mount Sinai', 'Mount Olives', 'Mount Carmel'], correctOption: 'Mount Zion', reference: 'Multiple verses (over 150 times)', diff: 'hard', time: 35 },
+                    { id: 'q20', text: "Where did God reveal or give the ten commandments to Moses?", options: ['Mount Sinai', 'Mount Horeb', 'Mount Zion', 'Mount Nebo'], correctOption: 'Mount Sinai', reference: 'Exodus 24:16', diff: 'easy', time: 15 },
+                    { id: 'q21', text: "On which mountain did Jesus deliver His prophetic discourse?", options: ['Mount Olives', 'Mount Zion', 'Mount Sinai', 'Mount of Transfiguration'], correctOption: 'Mount Olives', reference: 'Matthew 24:3', diff: 'hard', time: 35 },
+                    { id: 'q22', text: "In which city did Abraham originally live before moving to Canaan?", options: ['Ur', 'Haran', 'Babylon', 'Nineveh'], correctOption: 'Ur', reference: 'Genesis 11:31', diff: 'med', time: 25 },
+                    { id: 'q23', text: "In which city was Samson imprisoned before his death?", options: ['Gaza', 'Ashkelon', 'Gath', 'Ekron'], correctOption: 'Gaza', reference: 'Judges 16:21', diff: 'med', time: 25 },
+                    { id: 'q24', text: "Where did the prophet Jonah go to find a ship to Tarshish?", options: ['Joppa', 'Nineveh', 'Tarshish', 'Tyre'], correctOption: 'Joppa', reference: 'Jonah 1:3', diff: 'med', time: 25 }
                 ]
             },
             {
                 id: 'cat3',
                 name: 'Numbers & Ages',
                 questions: [
-                    { id: 'q27', text: "How old was David when he was anointed King of Israel?", answers: ['30', '30 years old', 'thirty', 'thirty years old'], diff: 'med', time: 25, displayAnswer: '30 years old' },
-                    { id: 'q28', text: "How many rivers were formed from the river that went out of Eden?", answers: ['four', '4'], diff: 'med', time: 25, displayAnswer: 'Four (Pishon, Gihon, Hiddekel, and Euphrates)' },
-                    { id: 'q29', text: "How many years were the Israelites in bondage in Egypt?", answers: ['430', '430 years'], diff: 'hard', time: 35, displayAnswer: '430 years' },
-                    { id: 'q30', text: "How old was Moses when he died?", answers: ['120', '120 years', 'one hundred twenty'], diff: 'med', time: 25, displayAnswer: '120 Years' }
+                    { id: 'q27', text: "How old was David when he was anointed King of Israel?", options: ['30 years old', '20 years old', '33 years old', '40 years old'], correctOption: '30 years old', reference: '2 Samuel 5:4', diff: 'med', time: 25 },
+                    { id: 'q28', text: "How many rivers were formed from the river that went out of Eden?", options: ['Four', 'Two', 'Three', 'Seven'], correctOption: 'Four', reference: 'Genesis 2:10', diff: 'med', time: 25 },
+                    { id: 'q29', text: "How many years were the Israelites in bondage in Egypt?", options: ['430 years', '400 years', '350 years', '40 years'], correctOption: '430 years', reference: 'Exodus 12:40-41', diff: 'hard', time: 35 },
+                    { id: 'q30', text: "How old was Moses when he died?", options: ['120 years', '100 years', '110 years', '150 years'], correctOption: '120 years', reference: 'Deuteronomy 34:7', diff: 'med', time: 25 }
                 ]
             }
         ];
@@ -408,11 +446,6 @@
         function init() {
             loadState();
             renderCategories();
-            document.getElementById('answer-input').addEventListener('keypress', function (e) {
-                if (e.key === 'Enter' && !this.disabled) {
-                    checkAnswer();
-                }
-            });
         }
 
         function loadState() {
@@ -443,6 +476,16 @@
             renderCategories();
         }
 
+        // Helper to shuffle an array (Fisher-Yates)
+        function shuffleArray(array) {
+            let shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
         function renderCategories() {
             for (let i = quizData.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -459,7 +502,6 @@
                 const box = document.createElement('div');
                 box.className = 'cat-box';
                 
-                // Check if all questions in this category are answered
                 const isCategoryComplete = cat.questions.every(q => gameState.answeredQuestions.includes(q.id));
                 
                 if (isCategoryComplete) {
@@ -501,7 +543,8 @@
                 card.innerHTML = `
                     <div class="q-number-large">${index + 1}</div>
                     <div class="q-status">✔</div>
-                    <div class="q-answer-reveal">${q.displayAnswer}</div>
+                    <div class="q-answer-reveal">${q.correctOption}</div>
+                    <div class="q-answer-reveal q-reference-reveal">${q.reference}</div>
                 `;
 
                 card.onclick = () => {
@@ -520,9 +563,9 @@
             currentActiveQuestion = { ...q, categoryId: cat.id };
             
             document.getElementById('play-question-text').textContent = q.text;
-            document.getElementById('answer-input').value = '';
-            document.getElementById('answer-input').disabled = true;
-            document.getElementById('submit-btn').style.display = 'none';
+            document.getElementById('mcq-container').style.display = 'none';
+            document.getElementById('mcq-container').innerHTML = '';
+            document.getElementById('play-reference').classList.remove('show');
             
             const timerDisplay = document.getElementById('timer-display');
             timerDisplay.classList.remove('danger');
@@ -546,17 +589,28 @@
                     timerDisplay.textContent = `Starts in ${readTimeLeft}...`;
                 } else {
                     clearInterval(readingInterval);
-                    startMainTimer(q.time);
+                    startMainTimer(q);
                 }
             }, 1000);
         }
 
-        function startMainTimer(totalTime) {
-            timeLeft = totalTime;
-            document.getElementById('answer-input').disabled = false;
-            document.getElementById('submit-btn').style.display = 'block';
+        function startMainTimer(q) {
+            timeLeft = q.time;
             document.getElementById('play-feedback').textContent = '';
-            document.getElementById('answer-input').focus();
+            
+            // Build and shuffle MCQ buttons
+            const mcqContainer = document.getElementById('mcq-container');
+            mcqContainer.style.display = 'grid';
+            
+            const shuffledOptions = shuffleArray(q.options);
+            
+            shuffledOptions.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'mcq-btn';
+                btn.textContent = opt;
+                btn.onclick = () => checkMcqAnswer(opt, btn);
+                mcqContainer.appendChild(btn);
+            });
             
             updateTimerDisplay();
             
@@ -588,45 +642,49 @@
         }
 
         function timeUp() {
-            document.getElementById('answer-input').disabled = true;
-            document.getElementById('submit-btn').style.display = 'none';
+            // Disable all buttons
+            document.querySelectorAll('.mcq-btn').forEach(b => b.disabled = true);
             const fb = document.getElementById('play-feedback');
             fb.className = 'feedback timeup';
             fb.textContent = "Time's up! Click Back to Categories to try again later.";
         }
 
-        function checkAnswer() {
+        function checkMcqAnswer(selectedOption, btnElement) {
             if (timeLeft <= 0) return;
             
-            const inputVal = document.getElementById('answer-input').value.trim().toLowerCase();
-            if (!inputVal) return;
-
-            const isCorrect = currentActiveQuestion.answers.some(ans => ans === inputVal);
+            const isCorrect = (selectedOption === currentActiveQuestion.correctOption);
             const fb = document.getElementById('play-feedback');
+            const refEl = document.getElementById('play-reference');
 
             if (isCorrect) {
                 clearInterval(timerInterval);
                 document.getElementById('timer-display').classList.remove('danger');
                 document.getElementById('timer-display').textContent = '✔';
                 
+                // Disable all buttons and highlight the correct one
+                document.querySelectorAll('.mcq-btn').forEach(b => b.disabled = true);
+                btnElement.classList.add('btn-correct');
+                
                 fb.className = 'feedback correct';
                 fb.textContent = "Correct! Going back to the Main Screen in 5 seconds...";
                 
-                document.getElementById('answer-input').disabled = true;
-                document.getElementById('submit-btn').style.display = 'none';
+                // Show Reference
+                refEl.textContent = `Reference: ${currentActiveQuestion.reference}`;
+                refEl.classList.add('show');
                 
                 gameState.answeredQuestions.push(currentActiveQuestion.id);
                 saveState();
 
-                // Wait 5 seconds before returning to the home screen (boxes 1, 2, 3)
+                // Wait 5 seconds before returning to the home screen
                 successTimeout = setTimeout(() => {
                     goHome();
                 }, 5000);
             } else {
+                btnElement.classList.add('btn-wrong');
+                btnElement.disabled = true; // Disable just this wrong choice so they can guess again
+                
                 fb.className = 'feedback wrong';
-                fb.textContent = "Incorrect, try again!";
-                document.getElementById('answer-input').value = '';
-                document.getElementById('answer-input').focus();
+                fb.textContent = "Incorrect, try another option!";
             }
         }
 

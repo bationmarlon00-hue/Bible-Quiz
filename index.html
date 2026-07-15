@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDA Bible Quiz Game</title>
+    <style>
+        :root {
+            --sda-blue: #003366;
+            --sda-gold: #F2A900;
+            --bg-color: #f4f6f8;
+            --text-color: #333;
+            --correct-green: #2ecc71;
+            --wrong-red: #e74c3c;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header {
+            background-color: var(--sda-blue);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .header-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .header-title span {
+            color: var(--sda-gold);
+        }
+        .reset-btn {
+            background: none;
+            border: 2px solid var(--sda-gold);
+            color: var(--sda-gold);
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .reset-btn:hover {
+            background: var(--sda-gold);
+            color: var(--sda-blue);
+        }
+        .container {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        /* Screens */
+        .screen {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        .screen.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Home Screen */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        .cat-box {
+            background: white;
+            border-radius: 15px;
+            height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 4px solid var(--sda-blue);
+            position: relative;
+        }
+        .cat-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+        .cat-box .box-number {
+            font-size: 5rem;
+            font-weight: bold;
+            color: var(--sda-blue);
+            transition: opacity 0.3s;
+        }
+        .cat-box .box-title {
+            display: none;
+            font-size: 1.8rem;
+            text-align: center;
+            color: var(--sda-blue);
+            padding: 1rem;
+            font-weight: bold;
+        }
+        .cat-box.revealed .box-number {
+            display: none;
+        }
+        .cat-box.revealed .box-title {
+            display: block;
+            color: var(--sda-gold);
+        }
+        .cat-box.revealed {
+            background: var(--sda-blue);
+            border-color: var(--sda-gold);
+        }
+        .instructions {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        /* Category Details Screen */
+        .back-btn {
+            background: var(--sda-blue);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+        .category-header {
+            color: var(--sda-blue);
+            border-bottom: 3px solid var(--sda-gold);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .questions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+        .question-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            cursor: pointer;
+            border-left: 5px solid var(--sda-blue);
+            transition: all 0.2s;
+            position: relative;
+        }
+        .question-card:hover {
+            background: #f8f9fa;
+        }
+        .question-card.answered {
+            border-left-color: var(--correct-green);
+            background: #f0fdf4;
+            cursor: default;
+        }
+        .q-number {
+            font-weight: bold;
+            color: var(--sda-blue);
+            margin-bottom: 0.5rem;
+        }
+        .q-status {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            font-size: 1.5rem;
+            color: var(--correct-green);
+            display: none;
+        }
+        .question-card.answered .q-status {
+            display: block;
+        }
+        .q-answer-reveal {
+            display: none;
+            margin-top: 1rem;
+            color: #27ae60;
+            font-weight: bold;
+            background: #e9f7ef;
+            padding: 0.5rem;
+            border-radius: 5px;
+        }
+        .question-card.answered .q-answer-reveal {
+            display: block;
+        }
+        .difficulty-badge {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+        .diff-easy { background: #3498db; }
+        .diff-med { background: #f39c12; }
+        .diff-hard { background: #e74c3c; }
+
+        /* Play Screen */
+        .play-container {
+            background: white;
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .timer {
+            font-size: 4rem;
+            font-weight: bold;
+            color: var(--sda-gold);
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .timer.danger {
+            color: var(--wrong-red);
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .play-question {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: var(--sda-blue);
+        }
+        .answer-input {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.2rem;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .answer-input:focus {
+            border-color: var(--sda-blue);
+        }
+        .submit-btn {
+            background: var(--sda-gold);
+            color: var(--sda-blue);
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+            width: 100%;
+        }
+        .submit-btn:hover {
+            background: #d49500;
+        }
+        .feedback {
+            margin-top: 1rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            min-height: 1.5em;
+        }
+        .feedback.wrong { color: var(--wrong-red); }
+        .feedback.correct { color: var(--correct-green); }
+        .feedback.timeup { color: var(--wrong-red); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-title">📖 <span>SDA</span> Bible Quiz Game</div>
+        <button class="reset-btn" onclick="resetGame()">🔄 Reset Progress</button>
+    </header>
+
+    <div class="container">
+        <!-- Main Screen -->
+        <div id="screen-home" class="screen active">
+            <p class="instructions">Click a box to reveal its category. Click it again to open the questions!</p>
+            <div class="categories-grid" id="categories-container">
+                <!-- Categories injected by JS -->
+            </div>
+        </div>
+
+        <!-- Category Questions Screen -->
+        <div id="screen-category" class="screen">
+            <button class="back-btn" onclick="showScreen('screen-home')">⬅ Back to Categories</button>
+            <h2 class="category-header" id="cat-title">Category Title</h2>
+            <div class="questions-grid" id="questions-container">
+                <!-- Questions injected by JS -->
+            </div>
+        </div>
+
+        <!-- Play Screen -->
+        <div id="screen-play" class="screen">
+            <button class="back-btn" onclick="cancelPlay()">⬅ Cancel</button>
+            <div class="play-container">
+                <div class="timer" id="timer-display">45</div>
+                <div class="play-question" id="play-question-text">Question text goes here?</div>
+                <input type="text" class="answer-input" id="answer-input" placeholder="Type your answer here..." autocomplete="off">
+                <button class="submit-btn" onclick="checkAnswer()">Submit Answer</button>
+                <div class="feedback" id="play-feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                id: 'cat1',
+                name: 'People in the Bible',
+                questions: [
+                    { id: 'q1', text: 'Who were the first apostles called to follow Jesus?', answers: ['peter and andrew', 'andrew and peter', 'peter & andrew', 'andrew & peter'], diff: 'easy', time: 45, displayAnswer: 'Peter and Andrew' },
+                    { id: 'q2', text: 'Who murders John the Baptist?', answers: ['king herod antipas', 'herod antipas', 'herod', 'king herod'], diff: 'med', time: 60, displayAnswer: 'King Herod Antipas' },
+                    { id: 'q3', text: 'Who betrayed Jesus?', answers: ['judas', 'judas iscariot'], diff: 'easy', time: 45, displayAnswer: 'Judas' },
+                    { id: 'q4', text: 'Who is the only daughter of Jacob?', answers: ['dinah'], diff: 'med', time: 60, displayAnswer: 'Dinah' },
+                    { id: 'q5', text: 'This man was sick for quite some time and died before Jesus arrived. When Jesus arrived however, he immediately raised him from the dead.', answers: ['lazarus'], diff: 'easy', time: 45, displayAnswer: 'Lazarus' },
+                    { id: 'q6', text: 'According to the Bible, who was the oldest man who ever lived?', answers: ['methuselah'], diff: 'easy', time: 45, displayAnswer: 'Methuselah' },
+                    { id: 'q7', text: 'Who is the woman that is Jewish and queen of Persia?', answers: ['esther', 'queen esther'], diff: 'easy', time: 45, displayAnswer: 'Esther' },
+                    { id: 'q8', text: 'Who is the woman was a prostitute who married Hosea?', answers: ['gomer'], diff: 'med', time: 60, displayAnswer: 'Gomer' },
+                    { id: 'q9', text: 'Who is the woman that was a Gentile and the great-grandmother of King David, placing her in the genealogy of Jesus Christ?', answers: ['ruth'], diff: 'med', time: 60, displayAnswer: 'Ruth' },
+                    { id: 'q10', text: 'Who is the baby that was put in a reed basket and placed in the Nile River?', answers: ['moses'], diff: 'easy', time: 45, displayAnswer: 'Moses' },
+                    { id: 'q11', text: 'Who is the youngster cared for his father\'s sheep and eventually saved his people from the Philistines by killing the champion Goliath?', answers: ['david', 'king david'], diff: 'easy', time: 45, displayAnswer: 'David' },
+                    { id: 'q12', text: 'Who are the parents of John the Baptist?', answers: ['elizabeth and zacharias', 'zacharias and elizabeth', 'zechariah and elizabeth', 'elizabeth and zechariah'], diff: 'hard', time: 75, displayAnswer: 'Elizabeth and Zacharias' },
+                    { id: 'q25', text: 'Who is the eldest son of Jacob?', answers: ['reuben'], diff: 'med', time: 60, displayAnswer: 'Reuben' },
+                    { id: 'q26', text: 'Who is the disciple of Jesus that He found under the fig tree?', answers: ['nathanael', 'nathaniel'], diff: 'hard', time: 75, displayAnswer: 'Nathanael' }
+                ]
+            },
+            {
+                id: 'cat2',
+                name: 'Places & Mountains',
+                questions: [
+                    { id: 'q13', text: 'Where was Jesus born?', answers: ['bethlehem'], diff: 'easy', time: 45, displayAnswer: 'Bethlehem' },
+                    { id: 'q14', text: 'What place does Jesus performed His first miracle?', answers: ['cana', 'cana in galilee'], diff: 'easy', time: 45, displayAnswer: 'Cana' },
+                    { id: 'q15', text: 'Where was the land that God sent Abraham to sacrifice his son Isaac?', answers: ['moriah', 'mount moriah'], diff: 'med', time: 60, displayAnswer: 'Moriah' },
+                    { id: 'q16', text: 'According to Deuteronomy 34:1-4, what mountain was Moses on when he saw Canaan, or the Promised Land, for his first and only time?', answers: ['mount nebo', 'nebo', 'mt nebo', 'mt. nebo'], diff: 'hard', time: 75, displayAnswer: 'Mount Nebo' },
+                    { id: 'q17', text: 'According to Genesis 8:4, where did Noah\'s ark land?', answers: ['mount ararat', 'ararat', 'mt ararat', 'mt. ararat'], diff: 'med', time: 60, displayAnswer: 'Mount Ararat' },
+                    { id: 'q18', text: 'Where were Saul and his three sons killed by the Philistines?', answers: ['mount gilboa', 'gilboa', 'mt gilboa', 'mt. gilboa'], diff: 'hard', time: 75, displayAnswer: 'Mount Gilboa' },
+                    { id: 'q19', text: 'What mountain is most mentioned in the Bible?', answers: ['mount zion', 'zion', 'mt zion', 'mt. zion'], diff: 'hard', time: 75, displayAnswer: 'Mount Zion' },
+                    { id: 'q20', text: 'Where did God reveal or give the ten commandments to Moses?', answers: ['mount sinai', 'sinai', 'mt sinai', 'mt. sinai'], diff: 'easy', time: 45, displayAnswer: 'Mount Sinai' },
+                    { id: 'q21', text: 'On which mountain did Jesus deliver His prophetic discourse?', answers: ['mount olives', 'mount of olives', 'mt olives', 'mt. olives', 'olives'], diff: 'hard', time: 75, displayAnswer: 'Mount Olives' },
+                    { id: 'q22', text: 'In which city did Abraham originally live before moving to Canaan?', answers: ['ur'], diff: 'med', time: 60, displayAnswer: 'Ur' },
+                    { id: 'q23', text: 'In which city was Samson imprisoned before his death?', answers: ['gaza'], diff: 'med', time: 60, displayAnswer: 'Gaza' },
+                    { id: 'q24', text: 'Where did the prophet Jonah go to find a ship to Tarshish?', answers: ['joppa'], diff: 'med', time: 60, displayAnswer: 'Joppa' }
+                ]
+            },
+            {
+                id: 'cat3',
+                name: 'Numbers & Ages',
+                questions: [
+                    { id: 'q27', text: 'How old was David when he was anointed King of Israel?', answers: ['30', '30 years old', 'thirty', 'thirty years old'], diff: 'med', time: 60, displayAnswer: '30 years old' },
+                    { id: 'q28', text: 'How many rivers were formed from the river that went out of Eden?', answers: ['four', '4'], diff: 'med', time: 60, displayAnswer: 'Four (Pishon, Gihon, Hiddekel, and Euphrates)' },
+                    { id: 'q29', text: 'How many years were the Israelites in bondage in Egypt?', answers: ['430', '430 years'], diff: 'hard', time: 75, displayAnswer: '430 years' },
+                    { id: 'q30', text: 'How old was Moses when he died?', answers: ['120', '120 years', 'one hundred twenty'], diff: 'med', time: 60, displayAnswer: '120 Years' }
+                ]
+            }
+        ];
+
+        let gameState = {
+            revealedCats: [],
+            answeredQuestions: []
+        };
+
+        let currentActiveQuestion = null;
+        let timerInterval = null;
+        let timeLeft = 0;
+
+        // Initialize
+        function init() {
+            loadState();
+            renderCategories();
+            
+            // Allow 'Enter' key to submit answer
+            document.getElementById('answer-input').addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    checkAnswer();
+                }
+            });
+        }
+
+        // State Management
+        function loadState() {
+            const saved = localStorage.getItem('sdaQuizState');
+            if (saved) {
+                gameState = JSON.parse(saved);
+            }
+        }
+
+        function saveState() {
+            localStorage.setItem('sdaQuizState', JSON.stringify(gameState));
+        }
+
+        function resetGame() {
+            if (confirm("Are you sure you want to reset all your progress? This cannot be undone.")) {
+                localStorage.removeItem('sdaQuizState');
+                gameState = { revealedCats: [], answeredQuestions: [] };
+                showScreen('screen-home');
+                renderCategories();
+            }
+        }
+
+        // Navigation
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        // Renders
+        function renderCategories() {
+            const container = document.getElementById('categories-container');
+            container.innerHTML = '';
+
+            quizData.forEach((cat, index) => {
+                const box = document.createElement('div');
+                box.className = 'cat-box';
+                const isRevealed = gameState.revealedCats.includes(cat.id);
+                
+                if (isRevealed) {
+                    box.classList.add('revealed');
+                }
+
+                box.innerHTML = `
+                    <div class="box-number">${index + 1}</div>
+                    <div class="box-title">${cat.name}</div>
+                `;
+
+                box.onclick = () => {
+                    if (!gameState.revealedCats.includes(cat.id)) {
+                        gameState.revealedCats.push(cat.id);
+                        saveState();
+                        box.classList.add('revealed');
+                    } else {
+                        openCategory(cat);
+                    }
+                };
+
+                container.appendChild(box);
+            });
+        }
+
+        function openCategory(cat) {
+            document.getElementById('cat-title').textContent = cat.name;
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
+
+            cat.questions.forEach((q, index) => {
+                const isAnswered = gameState.answeredQuestions.includes(q.id);
+                const card = document.createElement('div');
+                card.className = `question-card ${isAnswered ? 'answered' : ''}`;
+                
+                let diffText = q.diff === 'easy' ? 'Easy' : q.diff === 'med' ? 'Medium' : 'Hard';
+                let diffClass = `diff-${q.diff}`;
+
+                card.innerHTML = `
+                    <div class="difficulty-badge ${diffClass}">${diffText}</div>
+                    <div class="q-number">Question ${index + 1}</div>
+                    <div>${q.text.substring(0, 50)}...</div>
+                    <div class="q-status">✔</div>
+                    <div class="q-answer-reveal">Answer: ${q.displayAnswer}</div>
+                `;
+
+                card.onclick = () => {
+                    if (!isAnswered) {
+                        startPlay(q, cat);
+                    }
+                };
+
+                container.appendChild(card);
+            });
+
+            showScreen('screen-category');
+        }
+
+        // Play Logic
+        function startPlay(q, cat) {
+            currentActiveQuestion = { ...q, categoryId: cat.id };
+            document.getElementById('play-question-text').textContent = q.text;
+            document.getElementById('answer-input').value = '';
+            document.getElementById('answer-input').disabled = false;
+            document.getElementById('play-feedback').className = 'feedback';
+            document.getElementById('play-feedback').textContent = '';
+            document.querySelector('.submit-btn').style.display = 'block';
+            
+            timeLeft = q.time;
+            updateTimerDisplay();
+            
+            showScreen('screen-play');
+            document.getElementById('answer-input').focus();
+            
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    timeUp();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const timerEl = document.getElementById('timer-display');
+            timerEl.textContent = timeLeft;
+            if (timeLeft <= 10) {
+                timerEl.classList.add('danger');
+            } else {
+                timerEl.classList.remove('danger');
+            }
+        }
+
+        function cancelPlay() {
+            clearInterval(timerInterval);
+            const cat = quizData.find(c => c.id === currentActiveQuestion.categoryId);
+            openCategory(cat);
+        }
+
+        function timeUp() {
+            document.getElementById('answer-input').disabled = true;
+            document.querySelector('.submit-btn').style.display = 'none';
+            const fb = document.getElementById('play-feedback');
+            fb.className = 'feedback timeup';
+            fb.textContent = "Time's up! You can try again later.";
+        }
+
+        function checkAnswer() {
+            if (timeLeft <= 0) return;
+            
+            const inputVal = document.getElementById('answer-input').value.trim().toLowerCase();
+            if (!inputVal) return;
+
+            const isCorrect = currentActiveQuestion.answers.some(ans => ans === inputVal);
+            const fb = document.getElementById('play-feedback');
+
+            if (isCorrect) {
+                clearInterval(timerInterval);
+                fb.className = 'feedback correct';
+                fb.textContent = "Correct! Well done.";
+                document.getElementById('answer-input').disabled = true;
+                
+                gameState.answeredQuestions.push(currentActiveQuestion.id);
+                saveState();
+
+                setTimeout(() => {
+                    const cat = quizData.find(c => c.id === currentActiveQuestion.categoryId);
+                    openCategory(cat);
+                }, 1500);
+            } else {
+                fb.className = 'feedback wrong';
+                fb.textContent = "Incorrect, try again!";
+                document.getElementById('answer-input').value = '';
+                document.getElementById('answer-input').focus();
+            }
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>

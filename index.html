@@ -156,37 +156,47 @@
         }
         .questions-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 1rem;
         }
         .question-card {
             background: white;
-            padding: 1.5rem;
+            padding: 2rem;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             cursor: pointer;
-            border-left: 5px solid var(--sda-blue);
+            border: 3px solid var(--sda-blue);
             transition: all 0.2s;
             position: relative;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
         }
         .question-card:hover {
             background: #f8f9fa;
+            transform: scale(1.05);
         }
         .question-card.answered {
-            border-left-color: var(--correct-green);
+            border-color: var(--correct-green);
             background: #f0fdf4;
             cursor: default;
         }
-        .q-number {
+        .question-card.answered:hover {
+            transform: scale(1);
+        }
+        .q-number-large {
+            font-size: 3rem;
             font-weight: bold;
             color: var(--sda-blue);
-            margin-bottom: 0.5rem;
+        }
+        .question-card.answered .q-number-large {
+            display: none;
         }
         .q-status {
-            position: absolute;
-            top: 1.5rem;
-            right: 1.5rem;
-            font-size: 1.5rem;
+            font-size: 3rem;
             color: var(--correct-green);
             display: none;
         }
@@ -198,20 +208,19 @@
             margin-top: 1rem;
             color: #27ae60;
             font-weight: bold;
-            background: #e9f7ef;
-            padding: 0.5rem;
-            border-radius: 5px;
+            font-size: 1.1rem;
         }
         .question-card.answered .q-answer-reveal {
             display: block;
         }
         .difficulty-badge {
-            display: inline-block;
-            padding: 0.2rem 0.5rem;
+            position: absolute;
+            top: -10px;
+            padding: 0.2rem 0.8rem;
             border-radius: 15px;
             font-size: 0.8rem;
             color: white;
-            margin-bottom: 0.5rem;
+            font-weight: bold;
         }
         .diff-easy { background: #3498db; }
         .diff-med { background: #f39c12; }
@@ -228,11 +237,12 @@
             margin: 0 auto;
         }
         .timer {
-            font-size: 4rem;
+            font-size: 3rem;
             font-weight: bold;
             color: var(--sda-gold);
             margin-bottom: 1rem;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            min-height: 4rem;
         }
         .timer.danger {
             color: var(--wrong-red);
@@ -247,6 +257,7 @@
             font-size: 1.5rem;
             margin-bottom: 2rem;
             color: var(--sda-blue);
+            min-height: 4rem;
         }
         .answer-input {
             width: 100%;
@@ -260,6 +271,10 @@
         }
         .answer-input:focus {
             border-color: var(--sda-blue);
+        }
+        .answer-input:disabled {
+            background-color: #eee;
+            cursor: not-allowed;
         }
         .submit-btn {
             background: var(--sda-gold);
@@ -285,6 +300,7 @@
         .feedback.wrong { color: var(--wrong-red); }
         .feedback.correct { color: var(--correct-green); }
         .feedback.timeup { color: var(--wrong-red); }
+        .feedback.reading { color: var(--sda-blue); }
     </style>
 </head>
 <body>
@@ -298,28 +314,24 @@
         <!-- Main Screen -->
         <div id="screen-home" class="screen active">
             <p class="instructions">Click a box to reveal its category. Click it again to open the questions!</p>
-            <div class="categories-grid" id="categories-container">
-                <!-- Categories injected by JS -->
-            </div>
+            <div class="categories-grid" id="categories-container"></div>
         </div>
 
         <!-- Category Questions Screen -->
         <div id="screen-category" class="screen">
             <button class="back-btn" onclick="showScreen('screen-home')">⬅ Back to Categories</button>
             <h2 class="category-header" id="cat-title">Category Title</h2>
-            <div class="questions-grid" id="questions-container">
-                <!-- Questions injected by JS -->
-            </div>
+            <div class="questions-grid" id="questions-container"></div>
         </div>
 
         <!-- Play Screen -->
         <div id="screen-play" class="screen">
             <button class="back-btn" onclick="cancelPlay()">⬅ Cancel</button>
             <div class="play-container">
-                <div class="timer" id="timer-display">45</div>
+                <div class="timer" id="timer-display">Get Ready...</div>
                 <div class="play-question" id="play-question-text">Question text goes here?</div>
-                <input type="text" class="answer-input" id="answer-input" placeholder="Type your answer here..." autocomplete="off">
-                <button class="submit-btn" onclick="checkAnswer()">Submit Answer</button>
+                <input type="text" class="answer-input" id="answer-input" placeholder="Type your answer here..." autocomplete="off" disabled>
+                <button class="submit-btn" id="submit-btn" onclick="checkAnswer()" style="display: none;">Submit Answer</button>
                 <div class="feedback" id="play-feedback"></div>
             </div>
         </div>
@@ -341,7 +353,7 @@
                     { id: 'q8', text: 'Who is the woman was a prostitute who married Hosea?', answers: ['gomer'], diff: 'med', time: 60, displayAnswer: 'Gomer' },
                     { id: 'q9', text: 'Who is the woman that was a Gentile and the great-grandmother of King David, placing her in the genealogy of Jesus Christ?', answers: ['ruth'], diff: 'med', time: 60, displayAnswer: 'Ruth' },
                     { id: 'q10', text: 'Who is the baby that was put in a reed basket and placed in the Nile River?', answers: ['moses'], diff: 'easy', time: 45, displayAnswer: 'Moses' },
-                    { id: 'q11', text: 'Who is the youngster cared for his father\'s sheep and eventually saved his people from the Philistines by killing the champion Goliath?', answers: ['david', 'king david'], diff: 'easy', time: 45, displayAnswer: 'David' },
+                    { id: 'q11', text: 'Who is the youngster cared for his father\\'s sheep and eventually saved his people from the Philistines by killing the champion Goliath?', answers: ['david', 'king david'], diff: 'easy', time: 45, displayAnswer: 'David' },
                     { id: 'q12', text: 'Who are the parents of John the Baptist?', answers: ['elizabeth and zacharias', 'zacharias and elizabeth', 'zechariah and elizabeth', 'elizabeth and zechariah'], diff: 'hard', time: 75, displayAnswer: 'Elizabeth and Zacharias' },
                     { id: 'q25', text: 'Who is the eldest son of Jacob?', answers: ['reuben'], diff: 'med', time: 60, displayAnswer: 'Reuben' },
                     { id: 'q26', text: 'Who is the disciple of Jesus that He found under the fig tree?', answers: ['nathanael', 'nathaniel'], diff: 'hard', time: 75, displayAnswer: 'Nathanael' }
@@ -355,7 +367,7 @@
                     { id: 'q14', text: 'What place does Jesus performed His first miracle?', answers: ['cana', 'cana in galilee'], diff: 'easy', time: 45, displayAnswer: 'Cana' },
                     { id: 'q15', text: 'Where was the land that God sent Abraham to sacrifice his son Isaac?', answers: ['moriah', 'mount moriah'], diff: 'med', time: 60, displayAnswer: 'Moriah' },
                     { id: 'q16', text: 'According to Deuteronomy 34:1-4, what mountain was Moses on when he saw Canaan, or the Promised Land, for his first and only time?', answers: ['mount nebo', 'nebo', 'mt nebo', 'mt. nebo'], diff: 'hard', time: 75, displayAnswer: 'Mount Nebo' },
-                    { id: 'q17', text: 'According to Genesis 8:4, where did Noah\'s ark land?', answers: ['mount ararat', 'ararat', 'mt ararat', 'mt. ararat'], diff: 'med', time: 60, displayAnswer: 'Mount Ararat' },
+                    { id: 'q17', text: 'According to Genesis 8:4, where did Noah\\'s ark land?', answers: ['mount ararat', 'ararat', 'mt ararat', 'mt. ararat'], diff: 'med', time: 60, displayAnswer: 'Mount Ararat' },
                     { id: 'q18', text: 'Where were Saul and his three sons killed by the Philistines?', answers: ['mount gilboa', 'gilboa', 'mt gilboa', 'mt. gilboa'], diff: 'hard', time: 75, displayAnswer: 'Mount Gilboa' },
                     { id: 'q19', text: 'What mountain is most mentioned in the Bible?', answers: ['mount zion', 'zion', 'mt zion', 'mt. zion'], diff: 'hard', time: 75, displayAnswer: 'Mount Zion' },
                     { id: 'q20', text: 'Where did God reveal or give the ten commandments to Moses?', answers: ['mount sinai', 'sinai', 'mt sinai', 'mt. sinai'], diff: 'easy', time: 45, displayAnswer: 'Mount Sinai' },
@@ -384,22 +396,19 @@
 
         let currentActiveQuestion = null;
         let timerInterval = null;
+        let readingInterval = null;
         let timeLeft = 0;
 
-        // Initialize
         function init() {
             loadState();
             renderCategories();
-            
-            // Allow 'Enter' key to submit answer
             document.getElementById('answer-input').addEventListener('keypress', function (e) {
-                if (e.key === 'Enter') {
+                if (e.key === 'Enter' && !this.disabled) {
                     checkAnswer();
                 }
             });
         }
 
-        // State Management
         function loadState() {
             const saved = localStorage.getItem('sdaQuizState');
             if (saved) {
@@ -420,13 +429,11 @@
             }
         }
 
-        // Navigation
         function showScreen(screenId) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
         }
 
-        // Renders
         function renderCategories() {
             const container = document.getElementById('categories-container');
             container.innerHTML = '';
@@ -474,10 +481,9 @@
 
                 card.innerHTML = `
                     <div class="difficulty-badge ${diffClass}">${diffText}</div>
-                    <div class="q-number">Question ${index + 1}</div>
-                    <div>${q.text.substring(0, 50)}...</div>
+                    <div class="q-number-large">${index + 1}</div>
                     <div class="q-status">✔</div>
-                    <div class="q-answer-reveal">Answer: ${q.displayAnswer}</div>
+                    <div class="q-answer-reveal">${q.displayAnswer}</div>
                 `;
 
                 card.onclick = () => {
@@ -492,23 +498,52 @@
             showScreen('screen-category');
         }
 
-        // Play Logic
         function startPlay(q, cat) {
             currentActiveQuestion = { ...q, categoryId: cat.id };
+            
+            // Set up initial state for reading phase
             document.getElementById('play-question-text').textContent = q.text;
             document.getElementById('answer-input').value = '';
-            document.getElementById('answer-input').disabled = false;
-            document.getElementById('play-feedback').className = 'feedback';
-            document.getElementById('play-feedback').textContent = '';
-            document.querySelector('.submit-btn').style.display = 'block';
+            document.getElementById('answer-input').disabled = true;
+            document.getElementById('submit-btn').style.display = 'none';
             
-            timeLeft = q.time;
-            updateTimerDisplay();
+            const timerDisplay = document.getElementById('timer-display');
+            timerDisplay.classList.remove('danger');
             
+            const feedback = document.getElementById('play-feedback');
+            feedback.className = 'feedback reading';
+            feedback.textContent = 'Read carefully... Timer starts soon!';
+
             showScreen('screen-play');
+            
+            // Clear any old intervals
+            clearInterval(timerInterval);
+            clearInterval(readingInterval);
+
+            // 5 Second Reading Countdown
+            let readTimeLeft = 5;
+            timerDisplay.textContent = `Starts in ${readTimeLeft}...`;
+
+            readingInterval = setInterval(() => {
+                readTimeLeft--;
+                if (readTimeLeft > 0) {
+                    timerDisplay.textContent = `Starts in ${readTimeLeft}...`;
+                } else {
+                    clearInterval(readingInterval);
+                    startMainTimer(q.time);
+                }
+            }, 1000);
+        }
+
+        function startMainTimer(totalTime) {
+            timeLeft = totalTime;
+            document.getElementById('answer-input').disabled = false;
+            document.getElementById('submit-btn').style.display = 'block';
+            document.getElementById('play-feedback').textContent = '';
             document.getElementById('answer-input').focus();
             
-            clearInterval(timerInterval);
+            updateTimerDisplay();
+            
             timerInterval = setInterval(() => {
                 timeLeft--;
                 updateTimerDisplay();
@@ -531,13 +566,14 @@
 
         function cancelPlay() {
             clearInterval(timerInterval);
+            clearInterval(readingInterval);
             const cat = quizData.find(c => c.id === currentActiveQuestion.categoryId);
             openCategory(cat);
         }
 
         function timeUp() {
             document.getElementById('answer-input').disabled = true;
-            document.querySelector('.submit-btn').style.display = 'none';
+            document.getElementById('submit-btn').style.display = 'none';
             const fb = document.getElementById('play-feedback');
             fb.className = 'feedback timeup';
             fb.textContent = "Time's up! You can try again later.";
@@ -557,6 +593,7 @@
                 fb.className = 'feedback correct';
                 fb.textContent = "Correct! Well done.";
                 document.getElementById('answer-input').disabled = true;
+                document.getElementById('submit-btn').style.display = 'none';
                 
                 gameState.answeredQuestions.push(currentActiveQuestion.id);
                 saveState();

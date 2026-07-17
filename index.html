@@ -384,50 +384,137 @@
         const quizData = [
             {
                 id: 'cat1',
-                name: 'People in the Bible',
+                name: 'Heroes of the Faith',
                 questions: [
-                    { id: 'q1', text: "Who were the first apostles called to follow Jesus?", options: ['Peter and Andrew', 'James and John', 'Philip and Bartholomew', 'Paul and Silas'], correctOption: 'Peter and Andrew', reference: 'Matthew 4:18', diff: 'easy', time: 15 },
-                    { id: 'q2', text: "Who murders John the Baptist?", options: ['King Herod Antipas', 'Pontius Pilate', 'Herod the Great', 'Caesar Augustus'], correctOption: 'King Herod Antipas', reference: 'Matthew 14:1-12', diff: 'med', time: 25 },
-                    { id: 'q3', text: "Who betrayed Jesus?", options: ['Judas Iscariot', 'Peter', 'Thomas', 'John'], correctOption: 'Judas Iscariot', reference: 'Matthew 26:14-16', diff: 'easy', time: 15 },
-                    { id: 'q4', text: "Who is the only daughter of Jacob?", options: ['Dinah', 'Rachel', 'Leah', 'Tamar'], correctOption: 'Dinah', reference: 'Genesis 30:21', diff: 'med', time: 25 },
-                    { id: 'q5', text: "This man was sick for quite some time and died before Jesus arrived. When Jesus arrived however, he immediately raised him from the dead.", options: ['Lazarus', "Jairus' daughter", "The widow's son at Nain", 'Nicodemus'], correctOption: 'Lazarus', reference: 'John 11:43-44', diff: 'easy', time: 15 },
-                    { id: 'q6', text: "According to the Bible, who was the oldest man who ever lived?", options: ['Methuselah', 'Noah', 'Adam', 'Enoch'], correctOption: 'Methuselah', reference: 'Genesis 5:27', diff: 'easy', time: 15 },
-                    { id: 'q7', text: "Who is the woman that is Jewish and queen of Persia?", options: ['Esther', 'Vashti', 'Ruth', 'Jezebel'], correctOption: 'Esther', reference: 'Esther 2:17', diff: 'easy', time: 15 },
-                    { id: 'q8', text: "Who is the woman was a prostitute who married Hosea?", options: ['Gomer', 'Rahab', 'Mary Magdalene', 'Delilah'], correctOption: 'Gomer', reference: 'Hosea 1:3', diff: 'med', time: 25 },
-                    { id: 'q9', text: "Who is the woman that was a Gentile and the great-grandmother of King David, placing her in the genealogy of Jesus Christ?", options: ['Ruth', 'Rahab', 'Tamar', 'Bathsheba'], correctOption: 'Ruth', reference: 'Ruth 4:13-22 & Matthew 1:5', diff: 'med', time: 25 },
-                    { id: 'q10', text: "Who is the baby that was put in a reed basket and placed in the Nile River?", options: ['Moses', 'Aaron', 'Samuel', 'Isaac'], correctOption: 'Moses', reference: 'Exodus 2:3', diff: 'easy', time: 15 },
-                    { id: 'q11', text: "Who is the youngster cared for his father's sheep and eventually saved his people from the Philistines by killing the champion Goliath?", options: ['David', 'Saul', 'Samson', 'Jonathan'], correctOption: 'David', reference: '1 Samuel 17', diff: 'easy', time: 15 },
-                    { id: 'q12', text: "Who are the parents of John the Baptist?", options: ['Elizabeth and Zacharias', 'Mary and Joseph', 'Hannah and Elkanah', 'Sarah and Abraham'], correctOption: 'Elizabeth and Zacharias', reference: 'Luke 1:13', diff: 'hard', time: 35 },
-                    { id: 'q25', text: "Who is the eldest son of Jacob?", options: ['Reuben', 'Joseph', 'Judah', 'Simeon'], correctOption: 'Reuben', reference: 'Genesis 29:32', diff: 'med', time: 25 },
-                    { id: 'q26', text: "Who is the disciple of Jesus that He found under the fig tree?", options: ['Nathanael', 'Philip', 'Matthew', 'Zacchaeus'], correctOption: 'Nathanael', reference: 'John 1:48', diff: 'hard', time: 35 }
+                    { id: 'c1q1', text: "Of what wood was Noah’s Ark made?", options: ["Gopher wood", "Acacia wood", "Cedar of Lebanon", "Carob wood"], correctOption: "Gopher wood", reference: "Gen 6:14", time: 15 },
+                    { id: 'c1q2', text: "How long was the ark?", options: ["500 cubits", "100 cubits", "300 cubits", "250 cubits"], correctOption: "300 cubits", reference: "Gen 6:15", time: 25 },
+                    { id: 'c1q3', text: "For how long did the flood rain fall?", options: ["80 days and nights", "12 days and nights", "107 days and nights", "40 days and 40 nights"], correctOption: "40 days and 40 nights", reference: "Gen 7:12", time: 15 },
+                    { id: 'c1q4', text: "How long did the flood cover the earth?", options: ["19 days", "150 days", "50 days", "15 days"], correctOption: "150 days", reference: "Gen 7:24", time: 25 },
+                    { id: 'c1q5', text: "How old was Joseph when his brethren sold him into slavery?", options: ["69", "23", "17", "90"], correctOption: "17", reference: "Gen 37:2", time: 15 },
+                    { id: 'c1q6', text: "Who suggested that Joseph interpret the dreams of Pharaoh?", options: ["Potiphar", "The cupbearer", "Judah", "The baker"], correctOption: "The cupbearer", reference: "Gen 41:12–13", time: 25 },
+                    { id: 'c1q7', text: "What are the names of Joseph’s two sons?", options: ["John and Mark", "Cain and Abel", "Ephraim and Manasseh", "Dan and Naphtali"], correctOption: "Ephraim and Manasseh", reference: "Gen 41:51–52", time: 35 },
+                    { id: 'c1q8', text: "How long did Moses’s mother hide him to escape the death edict of Pharaoh?", options: ["13 months", "10 months", "3 months", "7 months"], correctOption: "3 months", reference: "Exod 2:2", time: 15 },
+                    { id: 'c1q9', text: "Who was Moses’s father-in-law?", options: ["Laban", "Mordechai", "Jethro", "Cyrus"], correctOption: "Jethro", reference: "Exod 3:1", time: 25 },
+                    { id: 'c1q10', text: "What was the name of Aaron’s (Moses’s brother) wife?", options: ["Elisheba", "Miriam", "Zipporah", "Deborah"], correctOption: "Elisheba", reference: "Exod 6:23", time: 35 },
+                    { id: 'c1q11', text: "How old was Moses when he gave God’s message to Pharaoh: “Let my people go”?", options: ["80 years", "18 years", "13 years", "39 years"], correctOption: "80 years", reference: "Exod 7:7", time: 15 },
+                    { id: 'c1q12', text: "What was the first of the ten plagues in Egypt?", options: ["Frogs", "Water turned into blood", "Plague of lice", "Darkness"], correctOption: "Water turned into blood", reference: "Exod 7:20", time: 25 },
+                    { id: 'c1q13', text: "Where was Moses buried?", options: ["In Canaan", "In a cave", "In the valley of Moab", "In the desert"], correctOption: "In the valley of Moab", reference: "Deut 34:6", time: 35 },
+                    { id: 'c1q14', text: "What was the height of Goliath?", options: ["Six cubits and a span", "Seven cubits and two spans", "Nine cubits and a span", "Five cubits and three spans"], correctOption: "Six cubits and a span", reference: "1 Sam 17:4", time: 15 },
+                    { id: 'c1q15', text: "When Saul was pursuing David, in which cave did David seek refuge?", options: ["Cave at Makkedah", "Cave of Machpelah", "Cave of Adullam", "Dambulla Cave"], correctOption: "Cave of Adullam", reference: "1 Sam 22:1", time: 25 },
+                    { id: 'c1q16', text: "Who was the chief of the three mighty men of David?", options: ["Jonathan", "Benaiah", "Josheb-basshebeth", "Abishai"], correctOption: "Josheb-basshebeth", reference: "2 Sam 23:8", time: 35 },
+                    { id: 'c1q17', text: "Who restored Paul’s sight after the Lord blinded him?", options: ["Peter", "Luke", "Ananias", "Matthew"], correctOption: "Ananias", reference: "Acts 9:17–18", time: 15 },
+                    { id: 'c1q18', text: "How did Paul escape Damascus when the Jews were trying to kill him?", options: ["He was let down from the city walls in a basket", "An angel lifted him out", "An earthquake created the means of escape", "Silas came to his rescue"], correctOption: "He was let down from the city walls in a basket", reference: "Acts 9:25", time: 25 },
+                    { id: 'c1q19', text: "Where was Paul stoned?", options: ["Melita", "Damascus", "Galilee", "Lystra"], correctOption: "Lystra", reference: "Acts 14:19", time: 35 },
+                    { id: 'c1q20', text: "Where was an altar erected “to the unknown God”?", options: ["Athens", "Capernaum", "Thessalonica", "Jericho"], correctOption: "Athens", reference: "Acts 17:22–23", time: 15 },
+                    { id: 'c1q21', text: "What Athenian judge was converted under Paul’s preaching?", options: ["Eunice", "Candace", "Eubulus", "Dionysius"], correctOption: "Dionysius", reference: "Acts 17:34", time: 25 },
+                    { id: 'c1q22', text: "What was Paul’s occupation?", options: ["Carpentry", "Tentmaking", "Stonemasonry", "Fishing"], correctOption: "Tentmaking", reference: "Acts 18:3", time: 15 },
+                    { id: 'c1q23', text: "Prior to raising Eutychus from the dead, Paul preached a lengthy sermon. At what hour did he end his sermon?", options: ["Early morning", "Mid afternoon", "Late evening", "Midnight"], correctOption: "Midnight", reference: "Acts 20:7", time: 25 },
+                    { id: 'c1q24', text: "What does Paul say is the fulfillment of the law?", options: ["Righteousness", "Patience", "Faith", "Love"], correctOption: "Love", reference: "Rom 13:10", time: 15 }
                 ]
             },
             {
                 id: 'cat2',
-                name: 'Places & Mountains',
+                name: 'Kings & Prophets',
                 questions: [
-                    { id: 'q13', text: "Where was Jesus born?", options: ['Bethlehem', 'Nazareth', 'Jerusalem', 'Capernaum'], correctOption: 'Bethlehem', reference: 'Matthew 2:1', diff: 'easy', time: 15 },
-                    { id: 'q14', text: "What place does Jesus performed His first miracle?", options: ['Cana', 'Galilee', 'Bethany', 'Jericho'], correctOption: 'Cana', reference: 'John 2:1-11', diff: 'easy', time: 15 },
-                    { id: 'q15', text: "Where was the land that God sent Abraham to sacrifice his son Isaac?", options: ['Mount Moriah', 'Mount Sinai', 'Mount Carmel', 'Mount Ararat'], correctOption: 'Mount Moriah', reference: 'Genesis 22:2', diff: 'med', time: 25 },
-                    { id: 'q16', text: "According to Deuteronomy 34:1-4, what mountain was Moses on when he saw Canaan, or the Promised Land, for his first and only time?", options: ['Mount Nebo', 'Mount Sinai', 'Mount Hor', 'Mount Horeb'], correctOption: 'Mount Nebo', reference: 'Deuteronomy 34:1', diff: 'hard', time: 35 },
-                    { id: 'q17', text: "According to Genesis 8:4, where did Noah's ark land?", options: ['Mount Ararat', 'Mount Sinai', 'Mount Zion', 'Mount Hermon'], correctOption: 'Mount Ararat', reference: 'Genesis 8:4', diff: 'med', time: 25 },
-                    { id: 'q18', text: "Where were Saul and his three sons killed by the Philistines?", options: ['Mount Gilboa', 'Mount Carmel', 'Mount Tabor', 'Mount Olives'], correctOption: 'Mount Gilboa', reference: '1 Samuel 31:1-6', diff: 'hard', time: 35 },
-                    { id: 'q19', text: "What mountain is most mentioned in the Bible?", options: ['Mount Zion', 'Mount Sinai', 'Mount Olives', 'Mount Carmel'], correctOption: 'Mount Zion', reference: 'Multiple verses (over 150 times)', diff: 'hard', time: 35 },
-                    { id: 'q20', text: "Where did God reveal or give the ten commandments to Moses?", options: ['Mount Sinai', 'Mount Horeb', 'Mount Zion', 'Mount Nebo'], correctOption: 'Mount Sinai', reference: 'Exodus 24:16', diff: 'easy', time: 15 },
-                    { id: 'q21', text: "On which mountain did Jesus deliver His prophetic discourse?", options: ['Mount Olives', 'Mount Zion', 'Mount Sinai', 'Mount of Transfiguration'], correctOption: 'Mount Olives', reference: 'Matthew 24:3', diff: 'hard', time: 35 },
-                    { id: 'q22', text: "In which city did Abraham originally live before moving to Canaan?", options: ['Ur', 'Haran', 'Babylon', 'Nineveh'], correctOption: 'Ur', reference: 'Genesis 11:31', diff: 'med', time: 25 },
-                    { id: 'q23', text: "In which city was Samson imprisoned before his death?", options: ['Gaza', 'Ashkelon', 'Gath', 'Ekron'], correctOption: 'Gaza', reference: 'Judges 16:21', diff: 'med', time: 25 },
-                    { id: 'q24', text: "Where did the prophet Jonah go to find a ship to Tarshish?", options: ['Joppa', 'Nineveh', 'Tarshish', 'Tyre'], correctOption: 'Joppa', reference: 'Jonah 1:3', diff: 'med', time: 25 }
+                    { id: 'c2q1', text: "What were Solomon’s other names?", options: ["Jedediah and Lemuel", "Joab and Lemuel", "Jedediah and Joab", "Lemuel and Jeremiah"], correctOption: "Jedediah and Lemuel", reference: "2 Sam 12:25; Prov 31:1", time: 25 },
+                    { id: 'c2q2', text: "What king was guilty of idolatry in making two golden calves and commanding the people to worship them?", options: ["Jeroboam", "Jehu", "Joktan", "Joram"], correctOption: "Jeroboam", reference: "1 Kgs 12:28", time: 25 },
+                    { id: 'c2q3', text: "Who was the most wicked king of Israel?", options: ["Ahab", "Abimelech", "Manasseh", "Menahem"], correctOption: "Ahab", reference: "1 Kgs 21:25", time: 15 },
+                    { id: 'c2q4', text: "What two kings disguised themselves before going into battle, and were both slain by archers?", options: ["Ahab and Zedekiah", "Enosh and Zedekiah", "Japeth and Josiah", "Ahab and Josiah"], correctOption: "Ahab and Josiah", reference: "1 Kings 22:34; 2 Chron 35:22", time: 35 },
+                    { id: 'c2q5', text: "What king was killed by his own sons?", options: ["Manasseh", "Sennacherib", "Ahaz", "Jotham"], correctOption: "Sennacherib", reference: "2 Kgs 19:36", time: 25 },
+                    { id: 'c2q6', text: "What king of Judah was overtaken by an invading army and had his eyes put out?", options: ["Zedekiah", "Jehoram", "Abijah", "Rehoboam"], correctOption: "Zedekiah", reference: "2 Kgs 25:7", time: 25 },
+                    { id: 'c2q7', text: "What king’s name meant peaceable?", options: ["Manasseh", "Josiah", "Solomon", "David"], correctOption: "Solomon", reference: "1 Chron 22:9", time: 15 },
+                    { id: 'c2q8', text: "Who was made king of Judah at seven years of age after having been hidden for six years?", options: ["Jehoshaphat", "Hosea", "Joash", "Ahaz"], correctOption: "Joash", reference: "2 Chron 23:11", time: 25 },
+                    { id: 'c2q9', text: "What king did God smite with leprosy?", options: ["Athaliah", "Jehoram", "Amaziah", "Uzziah"], correctOption: "Uzziah", reference: "2 Chron 26:19", time: 15 },
+                    { id: 'c2q10', text: "What king of Israel followed heathen practices by burning his children in the fire?", options: ["Abimelech", "Ahab", "Menahem", "Ahaz"], correctOption: "Ahaz", reference: "2 Chron 28:3", time: 25 },
+                    { id: 'c2q11', text: "What king was on the throne of Judah when he was only eight years old?", options: ["Adonibezek", "Jehoiachin", "Joash", "David"], correctOption: "Jehoiachin", reference: "2 Chron 36:9", time: 15 },
+                    { id: 'c2q12', text: "What was the name of the king of Judah who had his eyes put out and then was imprisoned for life?", options: ["Zedekiah", "Absalom", "Jehoshaphat", "Abimelech"], correctOption: "Zedekiah", reference: "Jer 52:11", time: 25 },
+                    { id: 'c2q13', text: "What was the first prophecy?", options: ["The end of the age", "The victory over Satan of the seed of the woman", "The second coming of Christ", "The destruction of the temple"], correctOption: "The victory over Satan of the seed of the woman", reference: "Gen 3:15", time: 35 },
+                    { id: 'c2q14', text: "What aged prophet’s hands were upheld by two persons and caused the armies of Israel to be victorious?", options: ["Elisha", "Elijah", "Moses", "Hosea"], correctOption: "Moses", reference: "Exod 17:12", time: 15 },
+                    { id: 'c2q15', text: "What prophet foretold the result of the ten tribes of Israel?", options: ["Isaiah", "Nahum", "Ahijah", "Nehemiah"], correctOption: "Ahijah", reference: "1 Kgs 11:29", time: 25 },
+                    { id: 'c2q16', text: "Who prophesied that Judah should be carried captive into Babylon?", options: ["Zechariah", "Nahum", "Jeremiah", "Haggai"], correctOption: "Jeremiah", reference: "Jer 20:4", time: 15 },
+                    { id: 'c2q17', text: "Which of the prophets was carried captive to Babylon?", options: ["Ezekiel", "Malachi", "Nehemiah", "Zechariah"], correctOption: "Ezekiel", reference: "Ezek 1:1", time: 25 },
+                    { id: 'c2q18', text: "What prophet was suspended between earth and heaven by a lock of his hair?", options: ["Daniel", "Ezekiel", "Joel", "Elisha"], correctOption: "Ezekiel", reference: "Ezek 8:3", time: 35 },
+                    { id: 'c2q19', text: "What prophet was sent as a missionary to the Ninevites?", options: ["Jonah", "Paul", "Elon", "Malachi"], correctOption: "Jonah", reference: "Jonah 1:1–2", time: 15 },
+                    { id: 'c2q20', text: "The destruction of Nineveh was the fulfillment of whose prophecy?", options: ["The prophet Jonah", "The prophet Isaiah", "The prophet Daniel", "The prophet Nahum"], correctOption: "The prophet Nahum", reference: "Nah 3", time: 25 }
                 ]
             },
             {
                 id: 'cat3',
-                name: 'Numbers & Ages',
+                name: 'Jesus and His Disciples',
                 questions: [
-                    { id: 'q27', text: "How old was David when he was anointed King of Israel?", options: ['30 years old', '20 years old', '33 years old', '40 years old'], correctOption: '30 years old', reference: '2 Samuel 5:4', diff: 'med', time: 25 },
-                    { id: 'q28', text: "How many rivers were formed from the river that went out of Eden?", options: ['Four', 'Two', 'Three', 'Seven'], correctOption: 'Four', reference: 'Genesis 2:10', diff: 'med', time: 25 },
-                    { id: 'q29', text: "How many years were the Israelites in bondage in Egypt?", options: ['430 years', '400 years', '350 years', '40 years'], correctOption: '430 years', reference: 'Exodus 12:40-41', diff: 'hard', time: 35 },
-                    { id: 'q30', text: "How old was Moses when he died?", options: ['120 years', '100 years', '110 years', '150 years'], correctOption: '120 years', reference: 'Deuteronomy 34:7', diff: 'med', time: 25 }
+                    { id: 'c3q1', text: "What was our Savior’s last command to his disciples?", options: ["Help widows and orphans", "Love others", "Make disciples of all the nations and baptize them", "Honor the Sabbath"], correctOption: "Make disciples of all the nations and baptize them", reference: "Matt 28:19", time: 15 },
+                    { id: 'c3q2', text: "Of whom did our Savior say, “I will make you fishers of men?”", options: ["Of Matthew, Peter, and Simeon", "Of Simeon, Peter, and Andrew", "Of James, Peter, and Andrew", "Of Thomas, Matthew, and Peter"], correctOption: "Of Simeon, Peter, and Andrew", reference: "Mark 1:17", time: 35 },
+                    { id: 'c3q3', text: "What two distinct promises did our Savior make to his disciples when he was about to leave them?", options: ["The gift in heaven and his return", "The salvation of their souls and the gift of the Comforter", "The riches of the world and a place in heaven", "The gift of the Comforter and his own personal return"], correctOption: "The gift of the Comforter and his own personal return", reference: "John 12:16, 19, 22, 28", time: 35 },
+                    { id: 'c3q4', text: "Which apostle told Christ he had left all to follow him?", options: ["Matthew", "James", "John", "Peter"], correctOption: "Peter", reference: "John 13:37", time: 15 },
+                    { id: 'c3q5', text: "Who took Judas’s place among the twelve?", options: ["Matthias", "Stephen", "Jude", "Paul"], correctOption: "Matthias", reference: "Acts 1:23", time: 25 },
+                    { id: 'c3q6', text: "Which of the apostles first suffered martyrdom?", options: ["Andrew", "Thomas", "James", "Paul"], correctOption: "James", reference: "Acts 12:2", time: 15 }
+                ]
+            },
+            {
+                id: 'cat4',
+                name: 'About God',
+                questions: [
+                    { id: 'c4q1', text: "What were the first words God spoke to man?", options: ["Rule the earth", "Fill the earth", "Be fruitful and multiply", "Love your neighbor"], correctOption: "Be fruitful and multiply", reference: "Gen 1:28", time: 15 },
+                    { id: 'c4q2', text: "What is the meaning of Jehovah Shammah?", options: ["Jehova is there", "Jehova is here", "Jehova is near", "Jehova is with us"], correctOption: "Jehova is there", reference: "Ezek 48:35", time: 25 },
+                    { id: 'c4q3', text: "How did God manifest his presence at the dedication of the temple?", options: ["Fire came down from heaven", "A cloud came from heaven", "Rain came from heaven", "A thunder came from heaven"], correctOption: "Fire came down from heaven", reference: "2 Chron 7:1", time: 25 },
+                    { id: 'c4q4', text: "On what three occasions are we expressly told that Jesus wept?", options: ["In Gethsemane and twice in Bethlehem", "Over Jerusalem and twice in Nazareth", "At the grave of Lazarus, over Jerusalem, and in Gethsemane", "At the grave of Lazarus, over Jerusalem, and in Bethlehem"], correctOption: "At the grave of Lazarus, over Jerusalem, and in Gethsemane", reference: "John 11:33; Luke 19:41; Heb 5:7", time: 35 },
+                    { id: 'c4q5', text: "Quote the first and last words of our Savior while on earth?", options: ["“I am the Way, the Truth, and the Life”; and, “Father, forgive them...”", "“Why were you searching for me?...”; and, “It is finished”", "“You shall love the Lord your God...”; and, “Father, into your hands...”", "“I am the Way, the Truth...”; and, “It is finished.”"], correctOption: "“Why were you searching for me?...”; and, “It is finished”", reference: "Luke 2:49; John 19:30", time: 35 },
+                    { id: 'c4q6', text: "With whom did our Savior spend his last Sabbath?", options: ["The apostles", "Peter, James, and John", "Simon the leper", "Mark and Luke"], correctOption: "Simon the leper", reference: "Matt 26:6", time: 25 },
+                    { id: 'c4q7', text: "Who is called the light of the world?", options: ["Moses", "Jesus", "John", "Abraham"], correctOption: "Jesus", reference: "John 8:12; 12:46", time: 15 },
+                    { id: 'c4q8', text: "What was the first miracle performed by Christ?", options: ["Healing of the blind man", "Feeding of the five thousand", "Water turned to wine", "Jesus waking on water"], correctOption: "Water turned to wine", reference: "John 2:1", time: 15 }
+                ]
+            },
+            {
+                id: 'cat5',
+                name: 'Fruit of Faith',
+                questions: [
+                    { id: 'c5q1', text: "When was the Sabbath first instituted, and by whom was it observed?", options: ["By Noah, after the flood", "By God, after creation", "By Adam, in the garden of Eden", "By Moses, at the giving of the ten commandments"], correctOption: "By God, after creation", reference: "Gen 2:2–3", time: 25 },
+                    { id: 'c5q2', text: "Who made the first confession to the Lord, as recorded in the Bible?", options: ["Abram", "Jacob", "Adam", "Moses"], correctOption: "Jacob", reference: "Gen 32:9", time: 25 },
+                    { id: 'c5q3', text: "Who delivered Israel by killing 600 Philistines with an ox goad?", options: ["David", "Jonathan", "Shamgar", "Samson"], correctOption: "Shamgar", reference: "Judg 3:31", time: 15 },
+                    { id: 'c5q4', text: "Who was the first recorded person raised from death to life?", options: ["Tabitha", "Jesus", "Lazarus", "The son of Zarephath’s daughter"], correctOption: "The son of Zarephath’s daughter", reference: "1 Kgs 17:21", time: 35 },
+                    { id: 'c5q5', text: "Who partook of a meal prepared by an angel, and was sustained forty days and nights while in the mountain?", options: ["Manoah", "Joseph", "Elijah", "Moses"], correctOption: "Elijah", reference: "1 Kgs 19:8–9", time: 25 },
+                    { id: 'c5q6', text: "What is the whole duty of man, according to the Scriptures?", options: ["Be fruitful and multiply", "Love enemies", "Take care of the earth", "Fear God and keep his commandments"], correctOption: "Fear God and keep his commandments", reference: "Eccl 12:13", time: 15 },
+                    { id: 'c5q7', text: "Which three men, in different periods, stood almost alone in their godliness, among a crooked and perverse generation?", options: ["Abraham, Daniel, and Job", "Joseph, Jacob, and Daniel", "Jacob, Noah, and Joseph", "Noah, Daniel, and Job"], correctOption: "Noah, Daniel, and Job", reference: "Ezek 14:14", time: 35 },
+                    { id: 'c5q8', text: "Who beheld a vision in the valley of dry bones?", options: ["Jeremiah", "Ezekiel", "Joseph", "Daniel"], correctOption: "Ezekiel", reference: "Ezek 37", time: 15 },
+                    { id: 'c5q9', text: "Who was compelled to bear the cross of Christ to the place of crucifixion?", options: ["Joseph", "John", "Peter", "Simon"], correctOption: "Simon", reference: "Mark 15:21", time: 15 },
+                    { id: 'c5q10', text: "What woman continued in prayer day and night in the temple?", options: ["Drusilla", "Mary", "Anna", "Lydia"], correctOption: "Anna", reference: "Luke 2:36", time: 15 },
+                    { id: 'c5q11', text: "Who was the first Christian martyr?", options: ["Stephen", "Peter", "John", "Paul"], correctOption: "Stephen", reference: "Acts 7:58", time: 15 }
+                ]
+            },
+            {
+                id: 'cat6',
+                name: 'Punishments & Conflicts',
+                questions: [
+                    { id: 'c6q1', text: "Who lost their lives for using “strange” fire?", options: ["Nadab and Abihu", "Jacob and Esau", "Ahab and Zedekiah", "Sisera and Barek"], correctOption: "Nadab and Abihu", reference: "Lev 9:24; 10:1–2", time: 25 },
+                    { id: 'c6q2', text: "What man of Israel was stoned for blaspheming God?", options: ["The son of Isaac", "Methuselah", "The son of Shelomith", "Kenan"], correctOption: "The son of Shelomith", reference: "Lev 24:10–11", time: 35 },
+                    { id: 'c6q3', text: "Which three men were swallowed alive in a pit?", options: ["Korah, Dathan, Hadad", "Jetur, Dathan, Abiram", "Korah, Dathan, Abiram", "Korah, Dathan, Rachab"], correctOption: "Korah, Dathan, Abiram", reference: "Num 26:9–10", time: 35 },
+                    { id: 'c6q4', text: "What tribe had no inheritance in the land of promise?", options: ["Reubenites", "Levites", "Gadites", "Manassa"], correctOption: "Levites", reference: "Deut 8:1, 5", time: 25 },
+                    { id: 'c6q5', text: "Who was punished with death for touching the ark of God?", options: ["Caleb", "Naaman", "Uzza", "Obed"], correctOption: "Uzza", reference: "1 Chron 13:9, 13", time: 15 },
+                    { id: 'c6q6', text: "What woman upon the death of her son, the king of Judah, murdered her grandchildren and usurped the kingdom?", options: ["Jezebel", "Rahab", "Athaliah", "Anna"], correctOption: "Athaliah", reference: "2 Chron 22:10", time: 25 },
+                    { id: 'c6q7', text: "What man, although warned, invited his murderer to a feast?", options: ["Jesse", "Gedaliah", "Gideon", "Dan"], correctOption: "Gedaliah", reference: "Jer 40:14", time: 35 },
+                    { id: 'c6q8', text: "What city was taken by stratagem and burned, with 12,000 women and children?", options: ["Nineveh", "Thessalonica", "Ai", "Bethel"], correctOption: "Ai", reference: "Josh 8:5, 25", time: 25 },
+                    { id: 'c6q9', text: "How many Philistines did Samson slay with a jaw bone?", options: ["1,000", "40", "666", "2,000"], correctOption: "1,000", reference: "Judg 15:15", time: 15 },
+                    { id: 'c6q10', text: "What warrior fought so long and desperately that his hand was stuck to the hilt of his sword?", options: ["Elijah", "Jabez", "Eleazar", "Cush"], correctOption: "Eleazar", reference: "2 Sam 23:10", time: 25 },
+                    { id: 'c6q11', text: "Who was in command of the largest army recorded in the Bible?", options: ["Zedekiah", "Ahab", "Asa", "Amon"], correctOption: "Asa", reference: "2 Chron 14:9", time: 25 }
+                ]
+            },
+            {
+                id: 'cat7',
+                name: 'Promise and Privilege',
+                questions: [
+                    { id: 'c7q1', text: "To whom did God promise that his children should be in numbers as the stars in heaven?", options: ["Abraham", "Jacob", "Moses", "Jethro"], correctOption: "Abraham", reference: "Gen 15:5", time: 15 },
+                    { id: 'c7q2', text: "Of which person who was not of Abraham’s seed did God say, “I will make him a great nation?”", options: ["Zelophehad", "Ishmael", "Esau", "Caleb"], correctOption: "Ishmael", reference: "Gen 17:20", time: 25 },
+                    { id: 'c7q3', text: "What were the three major promises God gave to Abraham?", options: ["Wealth, blessing, and the stars of heaven", "Seed, land, and blessing", "Blessing, health, and birthright", "Priesthood, wealth, and health"], correctOption: "Seed, land, and blessing", reference: "Gen 12:1–3; 15:5–7; 17:2–8", time: 35 },
+                    { id: 'c7q4', text: "What was the garden of Eden guarded with to prevent future access to the tree of life?", options: ["A pillar of fire", "A cherubim and a flaming sword", "A giant wall", "Leviathan"], correctOption: "A cherubim and a flaming sword", reference: "Gen 3:24", time: 25 },
+                    { id: 'c7q5', text: "What is the first city mentioned in the Bible?", options: ["Babylon", "Nineveh", "Enoch", "Sodom"], correctOption: "Enoch", reference: "Gen 4:17", time: 25 },
+                    { id: 'c7q6', text: "What is the name of the city to which Lot escaped at the destruction of Sodom?", options: ["Golon", "Zoar", "Silo", "Cabul"], correctOption: "Zoar", reference: "Gen 19:23", time: 25 },
+                    { id: 'c7q7', text: "How many cities were given to the Levites for their use?", options: ["56", "48", "34", "99"], correctOption: "48", reference: "Josh 21:11", time: 15 },
+                    { id: 'c7q8', text: "Which two men hid in a well to save their lives?", options: ["Jonathan and Ahimaaz", "Gideon and Phurah", "Saul and Jonathan", "David and Jonathan"], correctOption: "Jonathan and Ahimaaz", reference: "2 Sam 17:17–19", time: 35 },
+                    { id: 'c7q9', text: "What queen of Bible times is described by the epithet “that wicked woman”?", options: ["Lydia", "Esther", "Athaliah", "Jezebel"], correctOption: "Athaliah", reference: "2 Chron 24:7", time: 25 },
+                    { id: 'c7q10', text: "What book of the Bible was written without explicitly mentioning the name of God?", options: ["Songs of Solomon", "Esther", "Ruth", "Haggai"], correctOption: "Esther", reference: "None explicitly", time: 15 },
+                    { id: 'c7q11', text: "What other nation besides Israel is to be scattered to every people?", options: ["Egypt", "Lebanon", "Syria", "Elam"], correctOption: "Elam", reference: "Jer 49:36", time: 25 },
+                    { id: 'c7q12', text: "Who was the first Christian convert in Europe?", options: ["Lydia", "Phoebe", "Priscilla", "Salome"], correctOption: "Lydia", reference: "Acts 16:14", time: 25 },
+                    { id: 'c7q13', text: "Where will the great feast of the marriage supper of the Lamb be spread?", options: ["Earth", "Garden of Eden", "Bosom of Abraham", "Heaven"], correctOption: "Heaven", reference: "Rev 12:9", time: 15 }
                 ]
             }
         ];

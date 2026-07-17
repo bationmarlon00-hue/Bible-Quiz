@@ -313,7 +313,7 @@
             background: var(--wrong-red);
             border-color: var(--wrong-red);
             color: white;
-            opacity: 0.5 !important;
+            opacity: 1 !important;
         }
 
         .feedback {
@@ -440,7 +440,7 @@
         let currentActiveQuestion = null;
         let timerInterval = null;
         let readingInterval = null;
-        let successTimeout = null;
+        let redirectTimeout = null;
         let timeLeft = 0;
 
         function init() {
@@ -578,7 +578,7 @@
             
             clearInterval(timerInterval);
             clearInterval(readingInterval);
-            clearTimeout(successTimeout);
+            clearTimeout(redirectTimeout);
 
             let readTimeLeft = 5;
             timerDisplay.textContent = `Starts in ${readTimeLeft}...`;
@@ -637,7 +637,7 @@
         function cancelPlay() {
             clearInterval(timerInterval);
             clearInterval(readingInterval);
-            clearTimeout(successTimeout);
+            clearTimeout(redirectTimeout);
             goHome();
         }
 
@@ -646,7 +646,11 @@
             document.querySelectorAll('.mcq-btn').forEach(b => b.disabled = true);
             const fb = document.getElementById('play-feedback');
             fb.className = 'feedback timeup';
-            fb.textContent = "Time's up! Click Back to Categories to try again later.";
+            fb.textContent = "Time's up! Going back to the Main Screen in 5 seconds...";
+            
+            redirectTimeout = setTimeout(() => {
+                goHome();
+            }, 5000);
         }
 
         function checkMcqAnswer(selectedOption, btnElement) {
@@ -676,15 +680,25 @@
                 saveState();
 
                 // Wait 5 seconds before returning to the home screen
-                successTimeout = setTimeout(() => {
+                redirectTimeout = setTimeout(() => {
                     goHome();
                 }, 5000);
             } else {
+                clearInterval(timerInterval); // Stop the timer immediately
+                document.getElementById('timer-display').classList.add('danger');
+                document.getElementById('timer-display').textContent = '❌';
+                
+                // Disable all buttons so they cannot click anything else
+                document.querySelectorAll('.mcq-btn').forEach(b => b.disabled = true);
                 btnElement.classList.add('btn-wrong');
-                btnElement.disabled = true; // Disable just this wrong choice so they can guess again
                 
                 fb.className = 'feedback wrong';
-                fb.textContent = "Incorrect, try another option!";
+                fb.textContent = "Incorrect! Going back to the Main Screen in 5 seconds...";
+                
+                // Wait 5 seconds before returning to the home screen
+                redirectTimeout = setTimeout(() => {
+                    goHome();
+                }, 5000);
             }
         }
 
